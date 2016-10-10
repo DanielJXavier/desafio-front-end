@@ -1,6 +1,6 @@
 # desafio-front-end
 Desafio Front End - Hotmart
 
-Dsenvolvido em Meteor
+Desenvolvido em Meteor
 
 10/10/2016
