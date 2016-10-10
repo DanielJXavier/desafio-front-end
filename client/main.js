@@ -20,11 +20,15 @@ Router.route('/enderecos/:id', function () {
 // Startup
 Meteor.startup(function() {
 	GoogleMaps.load({key: 'AIzaSyCFLEYpbMY8AfipUrYDPqQCkCJOZgV1ufo'});
+	Meteor.call('authenticate', function(err, res) {
+		Session.set('authtoken', res.data.token_type[0].toUpperCase() + res.data.token_type.slice(1) + " " + res.data.access_token);
+		console.log(Session.get('authtoken'));
+	});
 });
 
 // Endereços
 Template.enderecos.onCreated(function() {
-	Meteor.call('getAddressList', function(err, res) {
+	Meteor.call('getAddressList', Session.get('authtoken'), function(err, res) {
 		res.data.data.reverse();
 		Session.set('addressList', res.data.data);
 	});
@@ -127,7 +131,7 @@ Template.novo_endereco.events({
 		data.latitude = event.target.latitude.value ? event.target.latitude.value : 0;
 		data.longitude = event.target.longitude.value ? event.target.longitude.value : 0;
 
-		Meteor.call('createAddress', data, function(err, res) {
+		Meteor.call('createAddress', Session.get('authtoken'), data, function(err, res) {
 			if (err) {
 				$("#error_message").fadeIn("slow");
 			} else {
@@ -139,7 +143,7 @@ Template.novo_endereco.events({
 
 // Editar endereço
 Template.editar_endereco.onCreated(function() {
-	Meteor.call('getAddress', Router.current().params.id, function(err, res) {
+	Meteor.call('getAddress', Session.get('authtoken'), Router.current().params.id, function(err, res) {
 		if (err) {
 			Router.go('/enderecos/novo');
 		} else {
@@ -245,7 +249,7 @@ Template.editar_endereco.events({
 		data.latitude = event.target.latitude.value ? event.target.latitude.value : 0;
 		data.longitude = event.target.longitude.value ? event.target.longitude.value : 0;
 
-		Meteor.call('editAddress', id, data, function(err, res) {
+		Meteor.call('editAddress', Session.get('authtoken'), id, data, function(err, res) {
 			if (err) {
 				$("#error_message").fadeIn("slow");
 			} else {
