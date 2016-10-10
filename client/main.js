@@ -22,7 +22,6 @@ Meteor.startup(function() {
 	GoogleMaps.load({key: 'AIzaSyCFLEYpbMY8AfipUrYDPqQCkCJOZgV1ufo'});
 	Meteor.call('authenticate', function(err, res) {
 		Session.set('authtoken', res.data.token_type[0].toUpperCase() + res.data.token_type.slice(1) + " " + res.data.access_token);
-		console.log(Session.get('authtoken'));
 	});
 });
 
