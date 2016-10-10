@@ -1,0 +1,169 @@
+<head>
+  <title>Desafio Front End - Hotmart</title>
+</head>
+
+<template name="home">
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Desafio Front End - Hotmart</h1>
+        <p>Ajude-nos a combater a infestação do mosquito transmissor da zika, dengue e chikungunya.</p>
+        <p><a class="btn btn-primary btn-lg" href="enderecos" role="button"><i class="fa fa-list" aria-hidden="true"></i> Ver endereços</a></p>
+      </div>
+    </div>
+  </body>
+</template>
+
+<template name="enderecos">
+  <body>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Endereços</li>
+          </ol>
+          <h1>Endereços cadastrados</h1>
+        </div>
+        <div class="panel-footer">
+          <p><a class="btn btn-primary btn-lg" href="enderecos/novo" role="button"><i class="fa fa-plus-circle" aria-hidden="true"></i> Adicionar um endereço</a></p>
+          {{#each addressList}}
+          <div class="list-group">
+            <a href="/enderecos/{{this.id}}" class="list-group-item">
+              <div class="row">
+                <div class="col-md-1 text-center">
+                  <i class="fa fa-map-marker fa-4x" aria-hidden="true"></i>
+                </div>
+                <div class="col-md-10">
+                  <h4 class="list-group-item-heading">{{this.label}}</h4>
+                  <p class="list-group-item-text">{{this.address}}, {{this.number}} - {{this.neighborhood}}, {{this.city}} - {{this.state}}</p>
+                  <p class="list-group-item-text">CEP: {{this.zipCode}}</p>
+                </div>
+                <div class="col-md-1">
+                  <i class="fa fa-pencil-square fa-4x" aria-hidden="true"></i>
+                </div>
+              </div>
+            </a>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </body>
+</template>
+
+<template name="novo_endereco">
+  <body>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/enderecos">Endereços</a></li>
+            <li class="active">Novo endereço</li>
+          </ol>
+          <h1>Novo endereço</h1>
+        </div>
+        <div class="panel-footer">
+          <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            Você pode selecionar o local no mapa ou digitar os dados manualmente
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="map-container">
+                {{> googleMap name="defaultMap" options=defaultMapOptions}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="error_message" class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">ERRO:</span>
+                Ooops! Não foi possível cadastrar este endereço. Tente novamente!
+              </div>
+              {{> form}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</template>
+
+<template name="editar_endereco">
+  <body>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/enderecos">Endereços</a></li>
+            <li class="active">{{label}}</li>
+          </ol>
+          <h1>{{label}}</h1>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="map-container">
+                {{> googleMap name="defaultMap" options=defaultMapOptions}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="error_message" class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">ERRO:</span>
+                Ooops! Não foi possível editar este endereço. Tente novamente!
+              </div>
+              {{> form}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</template>
+
+<template name="form">
+  <form id="form">
+    <div class="input-group">
+      <span class="input-group-addon">Nome</span>
+      <input name="label" id="label" type="text" class="form-control" placeholder="Ex.: Meu futuro emprego" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Endereço</span>
+      <input name="address" id="address" type="text" class="form-control" placeholder="Ex.: Rua Sergipe" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Número</span>
+      <input name="number" id="number" type="text" class="form-control" placeholder="Ex.: 1014" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Complemento</span>
+      <input name="complement" id="complement" type="text" class="form-control" placeholder="Ex.: 5º andar">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Bairro</span>
+      <input name="neighborhood" id="neighborhood" type="text" class="form-control" placeholder="Ex.: Funcionários" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Cidade</span>
+      <input name="city" id="city" type="text" class="form-control" placeholder="Ex.: Belo Horizonte" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">Estado</span>
+      <input name="state" id="state" type="text" class="form-control" placeholder="Ex.: Minas Gerais" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">País</span>
+      <input name="country" id="country" type="text" class="form-control" placeholder="Ex.: Brazil" required>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">CEP</span>
+      <input name="zipCode" id="zipCode" type="text" class="form-control" placeholder="Ex.: 30130-171">
+    </div>
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-check-circle" aria-hidden="true"></i> Salvar</button>
+  </form>
+</template>
